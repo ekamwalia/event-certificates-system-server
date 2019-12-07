@@ -3,10 +3,12 @@ const Event = require("../models/events");
 const to = require("../utils/to");
 
 exports.recordResults = async (req, res) => {
-  let err;
+  let err, event;
 
+  [err, event] = await to(Event.findOne({ eventID: req.body.eventID }));
+  console.log("Event is ", event);
   const first = new Result({
-    eventID: req.body.eventID,
+    event: event.name,
     name: req.body.firstName,
     class: req.body.firstClass,
     section: req.body.firstSection,
@@ -16,7 +18,7 @@ exports.recordResults = async (req, res) => {
   if (err) return res.status(500).send({ success: false, err });
 
   const second = new Result({
-    eventID: req.body.eventID,
+    event: event.name,
     name: req.body.secondName,
     class: req.body.secondClass,
     section: req.body.secondSection,
@@ -26,7 +28,7 @@ exports.recordResults = async (req, res) => {
   if (err) return res.status(500).send({ success: false, err });
 
   const third = new Result({
-    eventID: req.body.eventID,
+    event: event.name,
     name: req.body.thirdName,
     class: req.body.thirdClass,
     section: req.body.thirdSection,
